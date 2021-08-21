@@ -3,3 +3,4 @@ include: package:lint/analysis_options_package.yaml
 analyzer:
   errors: 
     todo: info
+    prefer_function_declarations_over_variables: ignore    
