@@ -1,7 +1,6 @@
-
 abstract class PException implements Exception {
   const PException([this.message]);
-  
+
   final String? message;
 }
 
@@ -11,9 +10,8 @@ class CancelledRequestException extends PException {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
-    return other is CancelledRequestException &&
-      other.message == message;
+
+    return other is CancelledRequestException && other.message == message;
   }
 
   @override

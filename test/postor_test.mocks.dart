@@ -24,7 +24,8 @@ import 'package:mockito/mockito.dart' as _i1;
 
 class _FakeResponse_0 extends _i1.Fake implements _i2.Response {}
 
-class _FakeStreamedResponse_1 extends _i1.Fake implements _i3.StreamedResponse {}
+class _FakeStreamedResponse_1 extends _i1.Fake implements _i3.StreamedResponse {
+}
 
 class _FakeUri_2 extends _i1.Fake implements Uri {}
 
@@ -43,40 +44,73 @@ class MockClient extends _i1.Mock implements _i6.Client {
   @override
   _i7.Future<_i2.Response> head(Uri? url, {Map<String, String>? headers}) =>
       (super.noSuchMethod(Invocation.method(#head, [url], {#headers: headers}),
-          returnValue: Future<_i2.Response>.value(_FakeResponse_0())) as _i7.Future<_i2.Response>);
+              returnValue: Future<_i2.Response>.value(_FakeResponse_0()))
+          as _i7.Future<_i2.Response>);
   @override
   _i7.Future<_i2.Response> get(Uri? url, {Map<String, String>? headers}) =>
       (super.noSuchMethod(Invocation.method(#get, [url], {#headers: headers}),
-          returnValue: Future<_i2.Response>.value(_FakeResponse_0())) as _i7.Future<_i2.Response>);
+              returnValue: Future<_i2.Response>.value(_FakeResponse_0()))
+          as _i7.Future<_i2.Response>);
   @override
-  _i7.Future<_i2.Response> post(Uri? url, {Map<String, String>? headers, Object? body, _i8.Encoding? encoding}) =>
-      (super.noSuchMethod(Invocation.method(#post, [url], {#headers: headers, #body: body, #encoding: encoding}),
-          returnValue: Future<_i2.Response>.value(_FakeResponse_0())) as _i7.Future<_i2.Response>);
+  _i7.Future<_i2.Response> post(Uri? url,
+          {Map<String, String>? headers,
+          Object? body,
+          _i8.Encoding? encoding}) =>
+      (super.noSuchMethod(
+              Invocation.method(#post, [url],
+                  {#headers: headers, #body: body, #encoding: encoding}),
+              returnValue: Future<_i2.Response>.value(_FakeResponse_0()))
+          as _i7.Future<_i2.Response>);
   @override
-  _i7.Future<_i2.Response> put(Uri? url, {Map<String, String>? headers, Object? body, _i8.Encoding? encoding}) =>
-      (super.noSuchMethod(Invocation.method(#put, [url], {#headers: headers, #body: body, #encoding: encoding}),
-          returnValue: Future<_i2.Response>.value(_FakeResponse_0())) as _i7.Future<_i2.Response>);
+  _i7.Future<_i2.Response> put(Uri? url,
+          {Map<String, String>? headers,
+          Object? body,
+          _i8.Encoding? encoding}) =>
+      (super.noSuchMethod(
+              Invocation.method(#put, [url],
+                  {#headers: headers, #body: body, #encoding: encoding}),
+              returnValue: Future<_i2.Response>.value(_FakeResponse_0()))
+          as _i7.Future<_i2.Response>);
   @override
-  _i7.Future<_i2.Response> patch(Uri? url, {Map<String, String>? headers, Object? body, _i8.Encoding? encoding}) =>
-      (super.noSuchMethod(Invocation.method(#patch, [url], {#headers: headers, #body: body, #encoding: encoding}),
-          returnValue: Future<_i2.Response>.value(_FakeResponse_0())) as _i7.Future<_i2.Response>);
+  _i7.Future<_i2.Response> patch(Uri? url,
+          {Map<String, String>? headers,
+          Object? body,
+          _i8.Encoding? encoding}) =>
+      (super.noSuchMethod(
+              Invocation.method(#patch, [url],
+                  {#headers: headers, #body: body, #encoding: encoding}),
+              returnValue: Future<_i2.Response>.value(_FakeResponse_0()))
+          as _i7.Future<_i2.Response>);
   @override
-  _i7.Future<_i2.Response> delete(Uri? url, {Map<String, String>? headers, Object? body, _i8.Encoding? encoding}) =>
-      (super.noSuchMethod(Invocation.method(#delete, [url], {#headers: headers, #body: body, #encoding: encoding}),
-          returnValue: Future<_i2.Response>.value(_FakeResponse_0())) as _i7.Future<_i2.Response>);
+  _i7.Future<_i2.Response> delete(Uri? url,
+          {Map<String, String>? headers,
+          Object? body,
+          _i8.Encoding? encoding}) =>
+      (super.noSuchMethod(
+              Invocation.method(#delete, [url],
+                  {#headers: headers, #body: body, #encoding: encoding}),
+              returnValue: Future<_i2.Response>.value(_FakeResponse_0()))
+          as _i7.Future<_i2.Response>);
   @override
   _i7.Future<String> read(Uri? url, {Map<String, String>? headers}) =>
-      (super.noSuchMethod(Invocation.method(#read, [url], {#headers: headers}), returnValue: Future<String>.value(''))
-          as _i7.Future<String>);
+      (super.noSuchMethod(Invocation.method(#read, [url], {#headers: headers}),
+          returnValue: Future<String>.value('')) as _i7.Future<String>);
   @override
-  _i7.Future<_i9.Uint8List> readBytes(Uri? url, {Map<String, String>? headers}) =>
-      (super.noSuchMethod(Invocation.method(#readBytes, [url], {#headers: headers}),
-          returnValue: Future<_i9.Uint8List>.value(_i9.Uint8List(0))) as _i7.Future<_i9.Uint8List>);
+  _i7.Future<_i9.Uint8List> readBytes(Uri? url,
+          {Map<String, String>? headers}) =>
+      (super.noSuchMethod(
+              Invocation.method(#readBytes, [url], {#headers: headers}),
+              returnValue: Future<_i9.Uint8List>.value(_i9.Uint8List(0)))
+          as _i7.Future<_i9.Uint8List>);
   @override
-  _i7.Future<_i3.StreamedResponse> send(_i10.BaseRequest? request) => (super.noSuchMethod(Invocation.method(#send, [request]),
-      returnValue: Future<_i3.StreamedResponse>.value(_FakeStreamedResponse_1())) as _i7.Future<_i3.StreamedResponse>);
+  _i7.Future<_i3.StreamedResponse> send(_i10.BaseRequest? request) =>
+      (super.noSuchMethod(Invocation.method(#send, [request]),
+              returnValue:
+                  Future<_i3.StreamedResponse>.value(_FakeStreamedResponse_1()))
+          as _i7.Future<_i3.StreamedResponse>);
   @override
-  void close() => super.noSuchMethod(Invocation.method(#close, []), returnValueForMissingStub: null);
+  void close() => super.noSuchMethod(Invocation.method(#close, []),
+      returnValueForMissingStub: null);
   @override
   String toString() => super.toString();
 }
@@ -100,34 +134,55 @@ class MockMultipartRequest extends _i1.Mock implements _i6.MultipartRequest {
   final List<MockMultipartFile> files = [];
 
   @override
-  int get contentLength => (super.noSuchMethod(Invocation.getter(#contentLength), returnValue: 0) as int);
+  int get contentLength =>
+      (super.noSuchMethod(Invocation.getter(#contentLength), returnValue: 0)
+          as int);
   @override
-  set contentLength(int? value) => super.noSuchMethod(Invocation.setter(#contentLength, value), returnValueForMissingStub: null);
+  set contentLength(int? value) =>
+      super.noSuchMethod(Invocation.setter(#contentLength, value),
+          returnValueForMissingStub: null);
   @override
   Map<String, String> get headers =>
-      (super.noSuchMethod(Invocation.getter(#headers), returnValue: <String, String>{}) as Map<String, String>);
+      (super.noSuchMethod(Invocation.getter(#headers),
+          returnValue: <String, String>{}) as Map<String, String>);
   @override
-  bool get persistentConnection => (super.noSuchMethod(Invocation.getter(#persistentConnection), returnValue: false) as bool);
+  bool get persistentConnection =>
+      (super.noSuchMethod(Invocation.getter(#persistentConnection),
+          returnValue: false) as bool);
   @override
   set persistentConnection(bool? value) =>
-      super.noSuchMethod(Invocation.setter(#persistentConnection, value), returnValueForMissingStub: null);
+      super.noSuchMethod(Invocation.setter(#persistentConnection, value),
+          returnValueForMissingStub: null);
   @override
-  bool get followRedirects => (super.noSuchMethod(Invocation.getter(#followRedirects), returnValue: false) as bool);
+  bool get followRedirects => (super
+          .noSuchMethod(Invocation.getter(#followRedirects), returnValue: false)
+      as bool);
   @override
   set followRedirects(bool? value) =>
-      super.noSuchMethod(Invocation.setter(#followRedirects, value), returnValueForMissingStub: null);
+      super.noSuchMethod(Invocation.setter(#followRedirects, value),
+          returnValueForMissingStub: null);
   @override
-  int get maxRedirects => (super.noSuchMethod(Invocation.getter(#maxRedirects), returnValue: 0) as int);
+  int get maxRedirects =>
+      (super.noSuchMethod(Invocation.getter(#maxRedirects), returnValue: 0)
+          as int);
   @override
-  set maxRedirects(int? value) => super.noSuchMethod(Invocation.setter(#maxRedirects, value), returnValueForMissingStub: null);
+  set maxRedirects(int? value) =>
+      super.noSuchMethod(Invocation.setter(#maxRedirects, value),
+          returnValueForMissingStub: null);
   @override
-  bool get finalized => (super.noSuchMethod(Invocation.getter(#finalized), returnValue: false) as bool);
+  bool get finalized =>
+      (super.noSuchMethod(Invocation.getter(#finalized), returnValue: false)
+          as bool);
   @override
   _i4.ByteStream finalize() =>
-      (super.noSuchMethod(Invocation.method(#finalize, []), returnValue: _FakeByteStream_3()) as _i4.ByteStream);
+      (super.noSuchMethod(Invocation.method(#finalize, []),
+          returnValue: _FakeByteStream_3()) as _i4.ByteStream);
   @override
-  _i7.Future<_i3.StreamedResponse> send() => (super.noSuchMethod(Invocation.method(#send, []),
-      returnValue: Future<_i3.StreamedResponse>.value(_FakeStreamedResponse_1())) as _i7.Future<_i3.StreamedResponse>);
+  _i7.Future<_i3.StreamedResponse> send() =>
+      (super.noSuchMethod(Invocation.method(#send, []),
+              returnValue:
+                  Future<_i3.StreamedResponse>.value(_FakeStreamedResponse_1()))
+          as _i7.Future<_i3.StreamedResponse>);
 
   @override
   bool operator ==(Object other) {
@@ -184,7 +239,6 @@ bool listEquals<T>(List<T>? a, List<T>? b) {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockMultipartFile implements _i6.MultipartFile {
-
   MockMultipartFile(
     this.field,
     Stream<List<int>> stream,
@@ -192,7 +246,8 @@ class MockMultipartFile implements _i6.MultipartFile {
     this.filename,
     _i5.MediaType? contentType,
   })  : _stream = _i6.ByteStream(stream),
-        contentType = contentType ?? _i5.MediaType('application', 'octet-stream');
+        contentType =
+            contentType ?? _i5.MediaType('application', 'octet-stream');
 
   factory MockMultipartFile.fromBytes(
     String field,
@@ -220,7 +275,7 @@ class MockMultipartFile implements _i6.MultipartFile {
 
   @override
   final int length;
-  
+
   /// The stream that will emit the file's contents.
   final _i4.ByteStream _stream;
 
@@ -230,21 +285,18 @@ class MockMultipartFile implements _i6.MultipartFile {
   @override
   bool get isFinalized => true;
 
-
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is _i6.MultipartFile &&
-      other.field == field &&
-      other.filename == filename &&
-      other.length == length;
+        other.field == field &&
+        other.filename == filename &&
+        other.length == length;
   }
 
   @override
   int get hashCode {
-    return field.hashCode ^
-      filename.hashCode ^
-      length.hashCode;
+    return field.hashCode ^ filename.hashCode ^ length.hashCode;
   }
 }

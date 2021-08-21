@@ -18,9 +18,9 @@ void main() {
 // whether the get users URL exists in CTManager or not.
 Future<void> requestUsers() async {
   const getUsersURL = MyApi.baseUrl + MyApi.usersEndpoint;
-  // since we didn't specify anything in Postor's `ctManager` 
+  // since we didn't specify anything in Postor's `ctManager`
   // parameter, our Postor in MyApi will use CTManager.I instead.
-  if(CTManager.I.of<String, Response?>(getUsersURL) != null){
+  if (CTManager.I.of<String, Response?>(getUsersURL) != null) {
     // not null means it exists in our Postor's CTManager
     // ignore: avoid_print
     print('getUsers already running!');
@@ -31,6 +31,7 @@ Future<void> requestUsers() async {
   // ignore: avoid_print
   print(users);
 }
+
 class MyApi {
   // note: I'm not endorsing this url, so use this at your own risk!
   static const String baseUrl = 'https://fakestoreapi.com';
@@ -49,7 +50,7 @@ class MyApi {
   Future<List<User>> getUsers() async {
     final response = await postor.get(usersEndpoint);
     final rawUsersList = json.decode(response.body) as List;
-    
+
     return rawUsersList.map((user) {
       return User.fromMap(user as Map<String, dynamic>);
     }).toList();
@@ -59,7 +60,7 @@ class MyApi {
     // postor will use the base URL + endpoint + parameters as the
     // cancellation token
     postor.cancel(baseUrl + usersEndpoint);
-    // or if we're on strong analyzer mode, 
+    // or if we're on strong analyzer mode,
     // which will suggest us to use string interpolation instead:
     // postor.cancel('$baseUrl$usersEndpoint');
   }
