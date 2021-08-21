@@ -1,8 +1,5 @@
-/// Support for doing something awesome.
-///
-/// More dartdocs go here.
 library postor;
 
-export 'src/postor_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/exceptions/postor_exception.dart';
+export 'src/postor.dart' show Postor;
+export 'src/postor_file.dart';
