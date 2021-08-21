@@ -1,18 +1,15 @@
-import 'dart:async' show FutureOr, TimeoutException;
+import 'dart:async' show FutureOr;
 import 'dart:convert' show Encoding, utf8;
-import 'dart:io' show File, SocketException;
 
 import 'package:ctmanager/ctmanager.dart' show CTManager;
-import 'package:http/http.dart' show BaseRequest, Client, MultipartFile, MultipartRequest, Response, StreamedResponse;
+import 'package:http/http.dart'
+    show BaseRequest, Client, MultipartRequest, Response, StreamedResponse;
 import 'package:meta/meta.dart' show visibleForTesting;
 import 'package:retry/retry.dart' show RetryOptions;
 
-import 'compute.dart';
 import 'exceptions/postor_exception.dart';
 import 'postor_file.dart';
-
-part 'postor_isolates.dart';
-part 'postor_impl.dart';
+import 'postor_impl_io.dart' if (dart.library.html) 'postor_impl_web.dart';
 
 typedef ResponseTimeoutCallback = FutureOr<Response> Function();
 typedef StreamedResponseTimeoutCallback = FutureOr<StreamedResponse> Function();
@@ -42,7 +39,7 @@ abstract class Postor {
     CTManager? ctManager,
     Duration? defaultTimeout,
     RetryOptions? retryPolicy,
-  }) = _PostorImpl;
+  }) = PostorImpl;
 
   String get baseUrl;
 
@@ -123,9 +120,9 @@ abstract class Postor {
 
   /// Creates an HTTP Client request with a default [timeLimit] of 10 seconds,
   /// and asynchronously returns the response, and then closes it after completed/cancelled.
-  /// 
+  ///
   /// [onCancel] an optional additional mechanism in the event of request cancellation
-  /// 
+  ///
   /// throws [CancelledRequestException] when cancelled.
   Future<StreamedResponse> send(
     BaseRequest request, {
@@ -167,7 +164,7 @@ abstract class Postor {
   ///   already the default value.
   ///
   ///
-  /// * [files] specify the field name and both file path/file bytes and file name (optional) 
+  /// * [files] specify the field name and both file path/file bytes and file name (optional)
   ///   using [PFile] here, for example:
   ///   ```dart
   ///   final postor = Postor('my-api.com');
@@ -184,14 +181,14 @@ abstract class Postor {
   ///   ```
   ///   note: by default Postor will handle these files in an isolate,
   ///   so theoritically there should not be any UI blocking problem.
-  /// 
-  /// 
+  ///
+  ///
   /// * [timeLimit] an optional different timeout if needed
-  /// 
-  /// 
+  ///
+  ///
   /// * [onTimeout] an optional callback when [timeLimit] has exceeded
-  /// 
-  /// 
+  ///
+  ///
   /// final notes:
   ///   * both files/images processing and request can be cancelled via [cancel] or via [CTManager.cancel].
   ///   for example:
