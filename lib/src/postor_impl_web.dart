@@ -1,7 +1,26 @@
-part of 'postor.dart';
+import 'dart:async' show TimeoutException;
+import 'dart:convert' show Encoding;
 
-class _PostorImpl implements Postor {
-  _PostorImpl(
+import 'package:ctmanager/ctmanager.dart' show CTManager;
+import 'package:http/http.dart'
+    show
+        BaseRequest,
+        Client,
+        ClientException,
+        MultipartFile,
+        MultipartRequest,
+        Response,
+        StreamedResponse;
+import 'package:meta/meta.dart' show visibleForTesting;
+import 'package:retry/retry.dart' show RetryOptions;
+
+import 'exceptions/postor_exception.dart';
+import 'postor.dart';
+import 'postor_file/pfile.dart';
+import 'postor_file/pfile_path_web.dart';
+
+class PostorImpl implements Postor {
+  PostorImpl(
     String baseUrl, {
     this.defaultHeaders,
     CTManager? ctManager,
@@ -14,7 +33,9 @@ class _PostorImpl implements Postor {
     final baseUri = Uri.parse(baseUrl);
     final baseUrlScheme = baseUri.scheme;
     assert(
-      baseUrlScheme.isEmpty || baseUrlScheme == 'http' || baseUrlScheme == 'https',
+      baseUrlScheme.isEmpty ||
+          baseUrlScheme == 'http' ||
+          baseUrlScheme == 'https',
       'Cannot parse scheme of $baseUrlScheme',
     );
     if (baseUrlScheme == 'http') {
@@ -62,11 +83,14 @@ class _PostorImpl implements Postor {
       parameters: parameters,
     );
     final request = () {
-      return client.get(url, headers: _concatHeaders(headers)).timeout(timeLimit ?? _defaultTimeout, onTimeout: onTimeout);
+      return client
+          .get(url, headers: _concatHeaders(headers))
+          .timeout(timeLimit ?? _defaultTimeout, onTimeout: onTimeout);
     };
     final requestWithRetryTimeout = () {
       return _retryPolicy
-          .retry(request, retryIf: (e) => e is SocketException || e is TimeoutException)
+          .retry(request,
+              retryIf: (e) => e is ClientException || e is TimeoutException)
           .whenComplete(client.close);
     };
     final onCancelFunc = () {
@@ -98,12 +122,14 @@ class _PostorImpl implements Postor {
     );
     final request = () {
       return client
-          .post(url, headers: _concatHeaders(headers), body: body, encoding: encoding)
+          .post(url,
+              headers: _concatHeaders(headers), body: body, encoding: encoding)
           .timeout(timeLimit ?? _defaultTimeout, onTimeout: onTimeout);
     };
     final requestWithRetryTimeout = () {
       return _retryPolicy
-          .retry(request, retryIf: (e) => e is SocketException || e is TimeoutException)
+          .retry(request,
+              retryIf: (e) => e is ClientException || e is TimeoutException)
           .whenComplete(client.close);
     };
     final onCancelFunc = () {
@@ -135,12 +161,14 @@ class _PostorImpl implements Postor {
     );
     final request = () {
       return client
-          .put(url, headers: _concatHeaders(headers), body: body, encoding: encoding)
+          .put(url,
+              headers: _concatHeaders(headers), body: body, encoding: encoding)
           .timeout(timeLimit ?? _defaultTimeout, onTimeout: onTimeout);
     };
     final requestWithRetryTimeout = () {
       return _retryPolicy
-          .retry(request, retryIf: (e) => e is SocketException || e is TimeoutException)
+          .retry(request,
+              retryIf: (e) => e is ClientException || e is TimeoutException)
           .whenComplete(client.close);
     };
     final onCancelFunc = () {
@@ -171,7 +199,8 @@ class _PostorImpl implements Postor {
     };
     final requestWithRetryTimeout = () {
       return _retryPolicy
-          .retry(requestFunc, retryIf: (e) => e is SocketException || e is TimeoutException)
+          .retry(requestFunc,
+              retryIf: (e) => e is ClientException || e is TimeoutException)
           .whenComplete(client.close);
     };
     final onCancelFunc = () {
@@ -204,7 +233,6 @@ class _PostorImpl implements Postor {
     final String operationToken = url.toString();
 
     bool isCancelled = false;
-    final isCancelledFunc = () => isCancelled;
 
     final multiPartRequest = MultipartRequest(method, url);
     if (fields != null && fields.isNotEmpty && !isCancelled) {
@@ -218,43 +246,35 @@ class _PostorImpl implements Postor {
         (field, pFile) => processList.add(
           () async {
             if (isCancelled) return;
-            final readFileFunc = () async {
-              if (pFile is PFileFromPath) {
-                final params = _IsolatedReadFileBytesParams(
-                  file: pFile.file,
-                  isCancelledFunc: isCancelledFunc,
-                );
-                return compute(_isolatedReadFileBytes, params);
-              } else if (pFile is PFileFromBytes) {
-                return pFile.file;
-              }
-              throw ArgumentError(
-                'Postor was not able to handle this PFile: $pFile. '
-                'It should be either a [PFileFromPath] or [PFileFromBytes]',
-              );
-            };
-
-            return readFileFunc().then((fileBytes) {
-              if (isCancelled) return;
-              multiPartFiles.add(
-                MultipartFile.fromBytes(
-                  field,
-                  fileBytes,
-                  filename: pFile.filename,
-                ),
-              );
-            });
+            if (pFile is PFileFromPath) {
+              return MultipartFile.fromPath(field, pFile.file,
+                      filename: pFile.filename)
+                  .then(multiPartFiles.add);
+            } else if (pFile is PFileFromBytes) {
+              return multiPartFiles.add(MultipartFile.fromBytes(
+                  field, pFile.file,
+                  filename: pFile.filename));
+            }
+            throw ArgumentError(
+              'Postor was not able to handle this PFile: $pFile. '
+              'It should be either a [PFileFromPath] or [PFileFromBytes]',
+            );
           },
         ),
       );
-      processList.add(() async => multiPartRequest.files.addAll(multiPartFiles));
+      processList
+          .add(() async => multiPartRequest.files.addAll(multiPartFiles));
     }
     final request = () {
-      return client.send(multiPartRequest).then(Response.fromStream).timeout(timeLimit ?? _defaultTimeout, onTimeout: onTimeout);
+      return client
+          .send(multiPartRequest)
+          .then(Response.fromStream)
+          .timeout(timeLimit ?? _defaultTimeout, onTimeout: onTimeout);
     };
     final requestWithRetryTimeout = () {
       return _retryPolicy
-          .retry(request, retryIf: (e) => e is SocketException || e is TimeoutException)
+          .retry(request,
+              retryIf: (e) => e is ClientException || e is TimeoutException)
           .whenComplete(client.close);
     };
     final void Function() onCancelFunc = () => isCancelled = true;
