@@ -1,3 +1,9 @@
+## 0.0.2+0
+- Added Postorized **(experimental)**
+- Added HTTP error code transformer
+- Added an extension: **get**
+- Updated Dart SDK constraint to 2.13.0
+
 ## 0.0.1+1
 
 - Added support on web
