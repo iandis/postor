@@ -21,17 +21,14 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: invalid_use_of_visible_for_testing_member
 // ignore_for_file: prefer_const_constructors
 // ignore_for_file: unnecessary_parenthesis
+// ignore_for_file: camel_case_types
 
 class _FakeResponse_0 extends _i1.Fake implements _i2.Response {}
 
 class _FakeStreamedResponse_1 extends _i1.Fake implements _i3.StreamedResponse {
 }
 
-class _FakeUri_2 extends _i1.Fake implements Uri {}
-
 class _FakeByteStream_3 extends _i1.Fake implements _i4.ByteStream {}
-
-class _FakeMediaType_4 extends _i1.Fake implements _i5.MediaType {}
 
 /// A class which mocks [Client].
 ///
@@ -111,8 +108,6 @@ class MockClient extends _i1.Mock implements _i6.Client {
   @override
   void close() => super.noSuchMethod(Invocation.method(#close, []),
       returnValueForMissingStub: null);
-  @override
-  String toString() => super.toString();
 }
 
 /// A class which mocks [MultipartRequest].
