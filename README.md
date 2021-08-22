@@ -1,6 +1,6 @@
 [![style: lint](https://img.shields.io/badge/style-lint-4BC0F5.svg)](https://pub.dev/packages/lint)
 
-A wrapper around Dart's [http](https://pub.dev/packages/http) package, which supports Manageable Requests Cancellation, Request Policy (Timeout and Retry), Easier Multipart Requests, etc.
+A wrapper around Dart's [http](https://pub.dev/packages/http) package, which supports Manageable Requests Cancellation, Request Policy (Timeout and Retry), Easier Multipart Requests, Error Handling, etc.
 
 ## Using
 
@@ -30,8 +30,14 @@ class MyApi {
 
   Future<List<User>> getUsers() async {
     final response = await postor.get(usersEndpoint);
+    if (response.statusCode != 200) {
+      throw transformStatusCodeToException(
+        statusCode: response.statusCode,
+        responseBody: response.body,
+      );
+    }
     final rawUsersList = json.decode(response.body) as List;
-    
+
     return rawUsersList.map((user) {
       return User.fromMap(user as Map<String, dynamic>);
     }).toList();
@@ -54,6 +60,21 @@ class User {
     );
   }
 }
+```
+The method body of `getUsers` can actually be simplified to
+```dart
+// use the `get<T>(expectedStatusCode)` extension to parse the
+// response body to T (e.g. List or Map).
+// by using this, we also no longer need to check the status code for
+// throwing exceptions based on the status code
+// since the extension already handles it.
+//
+// note: by default the [expectedStatusCode] is set to 200.
+// so if we expect other status code, we just need to set it.
+// for example:
+// final response = await postor.get(usersEndpoint).get<List>(201);  
+final response = await postor.get(usersEndpoint).get<List>();
+return response.map((u) => User.fromMap(u as Map<String, dynamic>)).toList();
 ```
 Now based on the above example, we can add another method to `MyApi` class that can cancel the request made by `getUsers`.
 ```dart
@@ -118,7 +139,7 @@ Future<void> requestUsers() async {
   users.addAll(usersList);
 }
 ```
-Lastly, to create a Multipart Request, e.g. image(s) uploading, there is Postor's `multiPart` method.
+Next, to create a Multipart Request, e.g. image(s) uploading, there is Postor's `multiPart` method.
 ```dart
 import 'package:postor/postor.dart';
 
@@ -160,3 +181,62 @@ or with CTManager
 CTManager.I.cancel('https://my-api.com/upload');
 ```
 Note: Postor handles files processing in an isolate, and both file processing and multipart request are cancelable.
+
+Lastly, there's a new yet experimental feature: `Postorized`. It enables centralization of error handling in the `main` method.
+```dart
+void main() {
+  final mainClosure = () {
+    requestUsers();
+    requestUsers();
+  };
+  Postorized(mainClosure)
+  // handle status code of 401
+  .on<UnauthorizedException>((e, st) {
+    // handle UnauthorizedException here
+  })
+  // or with its alias
+  // .on<SC401>((e, st) {
+  //
+  // })
+  .on<TimeoutException>((e, st) {
+    // ...
+  })
+  .on<CancelledRequestException>((e, st) {
+    // ...
+  })
+  .onElse((e, st) {
+    // handle other exceptions/errors here
+  })
+  // or just do nothing
+  // .onElse(doNothing)
+  .run();
+}
+```
+As a matter of style, we can also do similar with
+```dart
+void initErrorHandlers() {
+  // handle status code of 401
+  On<UnauthorizedException>((e, st) {
+    // handle UnauthorizedException here
+  });
+  On<TimeoutException>((e, st) {
+    // ...
+  });
+  On<CancelledRequestException>((e, st) {
+    // ...
+  });
+  OnElse((e, st) {
+    // handle other exceptions/errors here
+  });
+  // or just do nothing
+  // OnElse(doNothing);
+}
+void main() {
+  initErrorHandlers();
+  Postorized(() {
+    requestUsers();
+    requestUsers();
+  }).run();
+}
+```
+Note that there is a limitation of using this: it cannot evaluate subtypes. So if `B` is a subtype of `A`, and `B` is thrown, even though `A` is registered using the `on<A>` it will be handled by `onElse` instead. However, if `onElse` is not registered, it will log the error and stack trace.
