@@ -1,0 +1,44 @@
+name: PR workflow on master branch
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  analyze_with_dart:
+    name: Analyze PR using Dart latest version
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+
+      - name: Install dependencies
+        run: dart pub get
+        
+      - name: Verify formatting
+        run: dart format .
+
+      - name: Analyze package warnings
+        run: dart pub publish --dry-run
+
+      - name: Run tests
+        run: dart test
+  
+  analyze_with_pana:
+    name: Analyze PR using Pana latest version
+    needs: [analyze_with_dart]
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - uses: dart-lang/setup-dart@9a04e6d73cca37bd455e0608d7e5092f881fd603
+      
+      - name: Install dependencies
+        run: dart pub get
+      
+      - name: Install Pana
+        run: dart pub global activate pana
+      
+      - name: Run pana
+        run: $HOME/.pub-cache/bin/pana .
