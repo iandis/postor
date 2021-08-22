@@ -15,8 +15,8 @@ import 'package:http/http.dart'
 import 'package:meta/meta.dart' show visibleForTesting;
 import 'package:retry/retry.dart' show RetryOptions;
 
-import 'exceptions/postor_exception.dart';
 import 'postor.dart';
+import 'postor_exceptions.dart' show CancelledRequestException;
 import 'postor_file/pfile.dart';
 import 'postor_file/pfile_path.dart';
 
