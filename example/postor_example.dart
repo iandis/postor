@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert' show json;
 
 import 'package:postor/http.dart';
+import 'package:postor/postorized.dart';
 import 'package:postor/postor.dart';
 // read more about CTManager here: https://pub.dev/packages/ctmanager
 import 'package:ctmanager/ctmanager.dart';
@@ -8,10 +10,30 @@ import 'package:ctmanager/ctmanager.dart';
 final List<User> users = [];
 final MyApi myApi = MyApi();
 
+void initErrorHandlers() {
+  // handle status code of 401
+  On<UnauthorizedException>((e, st) {
+    // handle UnauthorizedException here
+  });
+  On<TimeoutException>((e, st) {
+    // ...
+  });
+  On<CancelledRequestException>((e, st) {
+    // ...
+  });
+  OnElse((e, st) {
+    // handle other exceptions/errors here
+  });
+  // or just do nothing
+  // OnElse(doNothing);
+}
+
 void main() {
-  requestUsers();
-  requestUsers();
-  // myApi.cancelGetUsers();
+  initErrorHandlers();
+  Postorized(() {
+    requestUsers();
+    requestUsers();
+  }).run();
 }
 
 // instead of creating another variable, we just need to check
@@ -49,11 +71,22 @@ class MyApi {
 
   Future<List<User>> getUsers() async {
     final response = await postor.get(usersEndpoint);
+    if (response.statusCode != 200) {
+      throw transformStatusCodeToException(
+        statusCode: response.statusCode,
+        responseBody: response.body,
+      );
+    }
     final rawUsersList = json.decode(response.body) as List;
 
     return rawUsersList.map((user) {
       return User.fromMap(user as Map<String, dynamic>);
     }).toList();
+
+    // or
+    //
+    // final response = await postor.get(usersEndpoint).get<List>();
+    // return response.map((u) => User.fromMap(u as Map<String, dynamic>)).toList();
   }
 
   void cancelGetUsers() {
