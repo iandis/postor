@@ -1,3 +1,7 @@
+## 0.0.2+1
+- Fixed issue on **meta**
+    - downgraded **meta** to 1.3.0 for compatibility with flutter
+
 ## 0.0.2+0
 - Added Postorized **(experimental)**
 - Added HTTP error code transformer
