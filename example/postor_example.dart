@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert' show json;
 
+import 'package:postor/error_handler.dart';
 import 'package:postor/http.dart';
-import 'package:postor/postorized.dart';
 import 'package:postor/postor.dart';
 // read more about CTManager here: https://pub.dev/packages/ctmanager
 import 'package:ctmanager/ctmanager.dart';
@@ -10,30 +10,12 @@ import 'package:ctmanager/ctmanager.dart';
 final List<User> users = [];
 final MyApi myApi = MyApi();
 
-void initErrorHandlers() {
-  // handle status code of 401
-  On<UnauthorizedException>((e, st) {
-    // handle UnauthorizedException here
-  });
-  On<TimeoutException>((e, st) {
-    // ...
-  });
-  On<CancelledRequestException>((e, st) {
-    // ...
-  });
-  OnElse((e, st) {
-    // handle other exceptions/errors here
-  });
-  // or just do nothing
-  // OnElse(doNothing);
+void initErrorMessageHandler() {
+  initErrorMessages(defaultErrorMessageHandler);
 }
 
 void main() {
-  initErrorHandlers();
-  Postorized(() {
-    requestUsers();
-    requestUsers();
-  }).run();
+  initErrorMessageHandler();
 }
 
 // instead of creating another variable, we just need to check

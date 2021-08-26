@@ -1,6 +1,6 @@
 name: postor
 description: A wrapper around Dart's http package, which supports Manageable Requests Cancellation, Request Policy (Timeout and Retry), Easier Multipart Requests, etc.
-version: 0.0.2+1
+version: 0.0.3+0
 repository: https://www.github.com/iandis/postor
 issue_tracker: https://www.github.com/iandis/postor/issues
 
@@ -8,7 +8,7 @@ environment:
   sdk: '>=2.13.0 <3.0.0'
 
 dependencies:
-  ctmanager: ^0.0.1+2
+  ctmanager: ^0.0.1+3
   http: ^0.13.3
   meta: ^1.3.0
   path: ^1.8.0

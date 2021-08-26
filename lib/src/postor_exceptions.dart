@@ -26,13 +26,15 @@ abstract class PException implements Exception {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is CancelledRequestException && other.message == message;
+    return other is PException && other.message == message;
   }
 
   @override
   int get hashCode => message.hashCode;
 }
 
+/// An exception that Postor throws in the event
+/// of request cancellation
 class CancelledRequestException extends PException {
   const CancelledRequestException([String? message]) : super(message);
 }
@@ -51,6 +53,8 @@ typedef SC429 = TooManyRequestsException;
 typedef SC431 = RequestHeadersTooLargeException;
 typedef SC5XX = ProblemWithServerException;
 
+/// An exception for other HTTP status codes that [PException]
+/// does not cover
 class UnknownHttpException extends PException {
   const UnknownHttpException([String? responseBody]) : super(responseBody);
 }

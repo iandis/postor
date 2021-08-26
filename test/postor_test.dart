@@ -13,7 +13,6 @@ import 'postor_test.mocks.dart';
 @GenerateMocks([Client, BaseRequest, MultipartRequest, MultipartFile])
 void main() {
   group('Tests for Postor:\n', () {
-    final ctManager = CTManager();
     const fakeBaseUrl = 'fake.com';
     const fakeEndpoint = '/fake';
     const fakeEndpointForTimeout = '/timeout';
@@ -29,7 +28,7 @@ void main() {
       ..fields['timeout1'] = 'true'
       ..fields['timeout2'] = 'true'
       ..files.add(MockMultipartFile.fromBytes('file_timeout', [1]));
-    final postor = Postor(fakeBaseUrl, ctManager: ctManager);
+    final postor = Postor(fakeBaseUrl);
     final mockClient = MockClient();
     bool firstRun = true;
 
