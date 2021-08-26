@@ -1,3 +1,9 @@
+## 0.0.3+0
+- **Postorized** is now deprecated due to its uselessness
+- Added **catchIt** as an alternative to **Postorized**
+- Fixed postor_test
+- Fixed **PException**'s equality operator
+- Updated **CTManager** to 0.0.1+3
 ## 0.0.2+1
 - Fixed issue on **meta**
     - downgraded **meta** to 1.3.0 for compatibility with flutter
