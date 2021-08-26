@@ -10,13 +10,14 @@ const _socketErrorMessage = 'No connection.';
 const _requestCancelledMessage = 'Request was cancelled.';
 
 /// A default error message handler for other platform besides web.
-/// 
+///
 /// This returns:
 /// * "Operation timeout." on [TimeoutException]
 /// * "No connection." on [SocketException]
 /// * The message on [PException] or "Request was cancelled" on [CancelledRequestException]
-/// * [otherErrorMessage] or "An unknown error occurred." on other exceptions 
-String defaultErrorMessageHandler(Object error, StackTrace? stackTrace, String? otherErrorMessage) {
+/// * [otherErrorMessage] or "An unknown error occurred." on other exceptions
+String defaultErrorMessageHandler(
+    Object error, StackTrace? stackTrace, String? otherErrorMessage) {
   dev.log(
     '[Default Error Handler] caught an error:\n\n$error\n\ncaused by the following:',
     stackTrace: stackTrace,

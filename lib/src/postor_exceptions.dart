@@ -54,7 +54,7 @@ typedef SC431 = RequestHeadersTooLargeException;
 typedef SC5XX = ProblemWithServerException;
 
 /// An exception for other HTTP status codes that [PException]
-/// does not cover 
+/// does not cover
 class UnknownHttpException extends PException {
   const UnknownHttpException([String? responseBody]) : super(responseBody);
 }

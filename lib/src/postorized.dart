@@ -1,7 +1,8 @@
 import 'dart:async' show runZonedGuarded;
 import 'dart:developer' as dev show log;
 
-typedef ErrorHandlerCallback<E extends Object> = void Function(E error, StackTrace stackTrace);
+typedef ErrorHandlerCallback<E extends Object> = void Function(
+    E error, StackTrace stackTrace);
 
 final Map<Type, dynamic> _handlers = {};
 
@@ -47,7 +48,8 @@ class Postorized {
     } else if (_onElse != null) {
       return _onElse!(exception, stackTrace);
     }
-    dev.log('[Postorized] Caught an unhandled error: \n$exception\n$stackTrace');
+    dev.log(
+        '[Postorized] Caught an unhandled error: \n$exception\n$stackTrace');
   }
 }
 

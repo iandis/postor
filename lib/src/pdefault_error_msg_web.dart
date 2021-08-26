@@ -10,13 +10,14 @@ const _clientErrorMessage = 'Request error.';
 const _requestCancelledMessage = 'Request was cancelled.';
 
 /// A default error message handler for web.
-/// 
+///
 /// This returns:
 /// * "Operation timeout." on [TimeoutException]
 /// * "Request error." on [ClientException]
 /// * The message on [PException] or "Request was cancelled" on [CancelledRequestException]
-/// * [otherErrorMessage] or "An unknown error occurred." on other exceptions 
-String defaultErrorMessageHandler(Object error, StackTrace? stackTrace, String? otherErrorMessage) {
+/// * [otherErrorMessage] or "An unknown error occurred." on other exceptions
+String defaultErrorMessageHandler(
+    Object error, StackTrace? stackTrace, String? otherErrorMessage) {
   dev.log(
     '[Default Error Handler] caught an error:\n\n$error\n\ncaused by the following:',
     stackTrace: stackTrace,

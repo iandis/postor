@@ -1,9 +1,11 @@
 import '/error_handler.dart' show defaultErrorMessageHandler;
 
-String Function(Object error, StackTrace? stackTrace, String? otherErrorMessage)? _errorHandler;
+String Function(
+        Object error, StackTrace? stackTrace, String? otherErrorMessage)?
+    _errorHandler;
 
 /// Useful for reducing LOCs in methods that have try-catch.
-/// 
+///
 /// For example:
 /// ```dart
 /// Future<void> getTest() async {
@@ -24,10 +26,10 @@ String Function(Object error, StackTrace? stackTrace, String? otherErrorMessage)
 ///   print(errorMessage);
 /// }
 /// ```
-/// 
+///
 /// Note: in order to use this, an error message handler has to be initialized first
 /// using [initErrorMessages]
-/// 
+///
 /// ```dart
 /// void main() {
 ///   initErrorMessages((Object error, StackTrace? stackTrace, String? otherErrorMessage) {
@@ -60,12 +62,12 @@ E catchIt<E>({
 
 /// Initializes error message handler. This should be called first before any [catchIt]
 /// is called. Also this should be called only once.
-/// 
+///
 /// [onError] is a function that must return a `String`
-/// 
-/// [otherErrorMessage] is an alternative message in case [error] was not handled by 
+///
+/// [otherErrorMessage] is an alternative message in case [error] was not handled by
 /// the error message handler.
-/// 
+///
 /// For example:
 /// ```dart
 /// void main() {
@@ -73,10 +75,10 @@ E catchIt<E>({
 ///     if(error is SomeError) {
 ///       return 'SomeError thrown.';
 ///     }else{
-///       return otherErrorMessage ?? 'An unknown error occurred'. 
+///       return otherErrorMessage ?? 'An unknown error occurred'.
 ///     }
 ///   });
-/// 
+///
 ///   try{
 ///     throw SomeUnknownError();
 ///   }catch(e, st) {
@@ -88,13 +90,16 @@ E catchIt<E>({
 ///     );
 ///   }
 /// }
-/// 
+///
 /// void _onError(String errorMessage) {
-///   print(errorMessage);  
+///   print(errorMessage);
 /// }
 /// ```
 /// The above example will print "Unknown error."
-void initErrorMessages(final String Function(Object error, StackTrace? stackTrace, String? otherErrorMessage) onError) {
+void initErrorMessages(
+    final String Function(
+            Object error, StackTrace? stackTrace, String? otherErrorMessage)
+        onError) {
   if (_errorHandler != null) {
     throw AssertionError('Error Message handler already exists!');
   }
