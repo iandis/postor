@@ -182,61 +182,47 @@ CTManager.I.cancel('https://my-api.com/upload');
 ```
 Note: Postor handles files processing in an isolate, and both file processing and multipart request are cancelable.
 
-Lastly, there's a new yet experimental feature: `Postorized`. It enables centralization of error handling in the `main` method.
+Lastly, there's a new feature: `catchIt`. This is pretty useful for reducing line of codes in methods that have try-catch. 
 ```dart
-void main() {
-  final mainClosure = () {
-    requestUsers();
-    requestUsers();
-  };
-  Postorized(mainClosure)
-  // handle status code of 401
-  .on<UnauthorizedException>((e, st) {
-    // handle UnauthorizedException here
-  })
-  // or with its alias
-  // .on<SC401>((e, st) {
-  //
-  // })
-  .on<TimeoutException>((e, st) {
-    // ...
-  })
-  .on<CancelledRequestException>((e, st) {
-    // ...
-  })
-  .onElse((e, st) {
-    // handle other exceptions/errors here
-  })
-  // or just do nothing
-  // .onElse(doNothing)
-  .run();
+import 'package:postor/postor.dart';
+import 'package:postor/error_handler.dart' as eh;
+
+final Postor postor = Postor('my-api.com');
+
+Future<void> getResponse() async {
+  try {
+    final response = await postor.get('/test').get<List>();
+    throw SomeError();
+    print('response: $response');
+  } catch (error, stackTrace) {
+    eh.catchIt(
+      error: error,
+      stackTrace: stackTrace,
+      otherErrorMessage: 'Failed to get response from /test',
+      onCatch: _onError,
+    );
+  }
+}
+
+void _onError(String errorMessage) {
+  print(errorMessage);
 }
 ```
-As a matter of style, we can also do similar with
+Don't forget to initialize the error message handler before using `catchIt`, e.g. in `main.dart`
 ```dart
-void initErrorHandlers() {
-  // handle status code of 401
-  On<UnauthorizedException>((e, st) {
-    // handle UnauthorizedException here
-  });
-  On<TimeoutException>((e, st) {
-    // ...
-  });
-  On<CancelledRequestException>((e, st) {
-    // ...
-  });
-  OnElse((e, st) {
-    // handle other exceptions/errors here
-  });
-  // or just do nothing
-  // OnElse(doNothing);
-}
 void main() {
-  initErrorHandlers();
-  Postorized(() {
-    requestUsers();
-    requestUsers();
-  }).run();
+  initErrorMessages((Object error, StackTrace? stackTrace, String? otherErrorMessage) {
+    if(error is TimeoutException) {
+      return 'Operation timeout'.
+    }else{
+      return otherErrorMessage ?? 'An unknown error occurred.'
+    }
+  });
 }
 ```
-Note that there is a limitation of using this: it cannot evaluate subtypes. So if `B` is a subtype of `A`, and `B` is thrown, even though `A` is registered using the `on<A>` it will be handled by `onElse` instead. However, if `onElse` is not registered, it will log the error and stack trace.
+Alternatively, there's [defaultErrorMessageHandler] that can be used.
+```dart
+void main() {
+  eh.initErrorMessages(eh.defaultErrorMessageHandler);
+}
+```
