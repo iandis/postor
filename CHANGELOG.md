@@ -1,3 +1,7 @@
+## 0.0.4
+- Added **defaultJsonDecoder** setter
+- Renamed **GetResponse** extension to **GetResponseExtension**
+- Updated README & example
 ## 0.0.3+0
 - **Postorized** is now deprecated due to its uselessness
 - Added **catchIt** as an alternative to **Postorized**

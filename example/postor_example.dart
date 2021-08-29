@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert' show json;
 
 import 'package:postor/error_handler.dart';
-import 'package:postor/http.dart';
 import 'package:postor/postor.dart';
 // read more about CTManager here: https://pub.dev/packages/ctmanager
 import 'package:ctmanager/ctmanager.dart';
@@ -24,9 +23,7 @@ Future<void> requestUsers() async {
   const getUsersURL = MyApi.baseUrl + MyApi.usersEndpoint;
   // since we didn't specify anything in Postor's `ctManager`
   // parameter, our Postor in MyApi will use CTManager.I instead.
-  if (CTManager.I.of<String, Response?>(getUsersURL) != null) {
-    // not null means it exists in our Postor's CTManager
-    // ignore: avoid_print
+  if (CTManager.I.hasTokenOf(getUsersURL)) {
     print('getUsers already running!');
     return;
   }
@@ -37,8 +34,7 @@ Future<void> requestUsers() async {
 }
 
 class MyApi {
-  // note: I'm not endorsing this url, so use this at your own risk!
-  static const String baseUrl = 'https://fakestoreapi.com';
+  static const String baseUrl = 'https://your-fake-api.com';
   static const String usersEndpoint = '/users';
 
   // this creates a new instance of Postor with the default
