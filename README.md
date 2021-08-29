@@ -131,8 +131,7 @@ Future<void> requestUsers() async {
   const getUsersURL = MyApi.baseUrl + MyApi.usersEndpoint;
   // since we didn't specify anything in Postor's `ctManager` 
   // parameter, our Postor in MyApi will use CTManager.I instead.
-  if(CTManager.I.of<String, Response?>(getUsersURL) != null){
-    // not null means it exists in our Postor's CTManager
+  if(CTManager.I.hasTokenOf(getUsersURL)){
     return;
   }
   final usersList = await myApi.getUsers();
@@ -182,7 +181,7 @@ CTManager.I.cancel('https://my-api.com/upload');
 ```
 Note: Postor handles files processing in an isolate, and both file processing and multipart request are cancelable.
 
-Lastly, there's a new feature: `catchIt`. This is pretty useful for reducing line of codes in methods that have try-catch. 
+Lastly, there's a new feature: `catchIt`. This might be useful for reducing line of codes in methods that have try-catch. 
 ```dart
 import 'package:postor/postor.dart';
 import 'package:postor/error_handler.dart' as eh;
