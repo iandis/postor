@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer' as dev show log;
+import 'dart:developer' as _dev show log;
 
 import 'package:http/http.dart' show ClientException;
 import 'postor_exceptions.dart' show PException, CancelledRequestException;
@@ -8,6 +8,7 @@ const _defaultOtherErrorMessage = 'An unknown error occurred.';
 const _timeoutErrorMessage = 'Operation timeout.';
 const _clientErrorMessage = 'Request error.';
 const _requestCancelledMessage = 'Request was cancelled.';
+const log = _dev.log;
 
 /// A default error message handler for web.
 ///
@@ -18,7 +19,7 @@ const _requestCancelledMessage = 'Request was cancelled.';
 /// * [otherErrorMessage] or "An unknown error occurred." on other exceptions
 String defaultErrorMessageHandler(
     Object error, StackTrace? stackTrace, String? otherErrorMessage) {
-  dev.log(
+  log(
     '[Default Error Handler] caught an error:\n\n$error\n\ncaused by the following:',
     stackTrace: stackTrace,
   );
@@ -28,7 +29,7 @@ String defaultErrorMessageHandler(
     return _clientErrorMessage;
   } else if (error is PException) {
     if (error is! CancelledRequestException) {
-      dev.log('[${error.runtimeType}] Response body: \n${error.message}');
+      log('[${error.runtimeType}] Response body: \n${error.message}');
     }
     return error.message ?? _requestCancelledMessage;
   } else {
