@@ -3,7 +3,9 @@ import 'dart:convert' show jsonDecode;
 import 'package:http/http.dart' show Response;
 import 'postor_exceptions.dart' show PException, transformStatusCodeToException;
 
-typedef _SyncAsyncJsonDecoderCallback = FutureOr<dynamic> Function(String source);
+typedef _SyncAsyncJsonDecoderCallback = FutureOr<dynamic> Function(
+  String source,
+);
 
 _SyncAsyncJsonDecoderCallback? _jsonDecoder;
 

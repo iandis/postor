@@ -9,6 +9,7 @@ const _timeoutErrorMessage = 'Operation timeout.';
 const _socketErrorMessage = 'No connection.';
 const _requestCancelledMessage = 'Request was cancelled.';
 const log = _dev.log;
+
 /// A default error message handler for other platform besides web.
 ///
 /// This returns:

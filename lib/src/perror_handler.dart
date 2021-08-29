@@ -1,10 +1,12 @@
 import '/error_handler.dart' show defaultErrorMessageHandler;
 
-String Function(
+typedef _ErrorMessageHandlerCallback = String Function(
   Object error,
   StackTrace? stackTrace,
   String? otherErrorMessage,
-)? _errorHandler;
+);
+
+_ErrorMessageHandlerCallback? _errorHandler;
 
 /// Might be useful for reducing LOCs in methods that have try-catch.
 ///
@@ -98,9 +100,7 @@ E catchIt<E>({
 /// }
 /// ```
 /// The above example will print "Unknown error."
-void initErrorMessages(
-  final String Function(Object error, StackTrace? stackTrace, String? otherErrorMessage) onError,
-) {
+void initErrorMessages(final _ErrorMessageHandlerCallback onError) {
   if (_errorHandler != null) {
     throw AssertionError('Error Message handler already exists!');
   }
