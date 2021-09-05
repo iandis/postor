@@ -1,3 +1,5 @@
+## 0.0.4+1
+- Updated `CTManager` version
 ## 0.0.4
 - Added **defaultJsonDecoder** setter
 - Renamed **GetResponse** extension to **GetResponseExtension**
